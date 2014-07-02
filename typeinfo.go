@@ -44,6 +44,7 @@ func getTypeInfo(typ reflect.Type) (*typeInfo, error) {
 		return tinfo, nil
 	}
 	tinfo = &typeInfo{}
+
 	if typ.Kind() == reflect.Struct && typ != tableType {
 		n := typ.NumField()
 		for i := 0; i < n; i++ {
@@ -84,10 +85,7 @@ func getTypeInfo(typ reflect.Type) (*typeInfo, error) {
 				tinfo.daltable = finfo
 				continue
 			}
-			// Add the field if it doesn't conflict with other fields.
-			//if err := addfieldInfo(typ, tinfo, finfo); err != nil {
-			//	return nil, err
-			//}
+			tinfo.fields = append(tinfo.fields, *finfo)
 		}
 	}
 
@@ -165,6 +163,6 @@ func structfieldInfo(typ reflect.Type, f *reflect.StructField) (*fieldInfo, erro
 		finfo.name = f.Name
 		return finfo, nil
 	}
-
+	finfo.name = tag
 	return finfo, nil
 }
