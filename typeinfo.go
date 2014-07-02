@@ -53,29 +53,7 @@ func getTypeInfo(typ reflect.Type) (*typeInfo, error) {
 				continue // Private field
 			}
 
-			// For embedded structs, embed its fields.
-			//if f.Anonymous {
-			//	t := f.Type
-			//	if t.Kind() == reflect.Ptr {
-			//		t = t.Elem()
-			//	}
-			//	if t.Kind() == reflect.Struct {
-			//		inner, err := getTypeInfo(t)
-			//		if err != nil {
-			//			return nil, err
-			//		}
-			//		if tinfo.daltable == nil {
-			//			tinfo.daltable = inner.daltable
-			//		}
-			//		for _, finfo := range inner.fields {
-			//			finfo.idx = append([]int{i}, finfo.idx...)
-			//			if err := addfieldInfo(typ, tinfo, &finfo); err != nil {
-			//				return nil, err
-			//			}
-			//		}
-			//		continue
-			//	}
-			//}
+			// FIXME: Support embedded structs
 
 			finfo, err := structfieldInfo(typ, &f)
 			if err != nil {
@@ -123,30 +101,7 @@ func structfieldInfo(typ reflect.Type, f *reflect.StructField) (*fieldInfo, erro
 				finfo.flags |= fOmitEmpty
 			}
 		}
-
-		// Validate the flags used.
-		//valid := true
-		//switch mode := finfo.flags & fMode; mode {
-		//case 0:
-		//	finfo.flags |= fElement
-		//case fAttr, fCharData, fInnerXml, fComment, fAny:
-		//	if f.Name == "XMLName" || tag != "" && mode != fAttr {
-		//		valid = false
-		//	}
-		//default:
-		//	// This will also catch multiple modes in a single field.
-		//	valid = false
-		//}
-		//if finfo.flags&fMode == fAny {
-		//	finfo.flags |= fElement
-		//}
-		//if finfo.flags&fOmitEmpty != 0 && finfo.flags&(fElement|fAttr) == 0 {
-		//	valid = false
-		//}
-		//if !valid {
-		//	return nil, fmt.Errorf("xml: invalid tag in field %s of type %s: %q",
-		//		f.Name, typ, f.Tag.Get("xml"))
-		//}
+		// FIXME: Validate the flags used.
 	}
 
 	if f.Name == "DALTable" {
@@ -163,6 +118,7 @@ func structfieldInfo(typ reflect.Type, f *reflect.StructField) (*fieldInfo, erro
 		finfo.name = f.Name
 		return finfo, nil
 	}
+
 	finfo.name = tag
 	return finfo, nil
 }
