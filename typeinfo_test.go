@@ -60,5 +60,4 @@ func TestColumnNames(t *testing.T) {
 	if tinfo.fields[1].name != "Location" {
 		t.Errorf("tinfo[1] should be Location, not %+v", tinfo.fields[1])
 	}
-
 }
