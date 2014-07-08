@@ -16,6 +16,7 @@ type library struct {
 	DALTable Table  `dal:"libraries"`
 	Name     string `dal:"branch_name"`
 	Location string
+	Key      int    `dal:"key,auto"`
 	Books    []book `dal:"-"`
 }
 
@@ -49,7 +50,7 @@ func TestColumnNames(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if len(tinfo.fields) != 2 {
+	if len(tinfo.fields) != 3 {
 		t.Fatal("tinfo should have 2 fields, not", len(tinfo.fields))
 	}
 
@@ -60,4 +61,18 @@ func TestColumnNames(t *testing.T) {
 	if tinfo.fields[1].name != "Location" {
 		t.Errorf("tinfo[1] should be Location, not %+v", tinfo.fields[1])
 	}
+
+	if tinfo.fields[2].name != "key" {
+		t.Errorf("tinfo[2] should be Location, not %+v", tinfo.fields[2])
+	}
+
 }
+
+//func TestValues(t *testing.T) {
+//	_, columns, _ := Expression(&library{}, QuerySelect)
+//
+//	if !reflect.DeepEqual(columns, []string{"libraries.branch_name libraries.Location libraries.key"}) {
+//		t.Errorf("%s is wrong", columns)
+//	}
+//
+//}

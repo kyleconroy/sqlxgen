@@ -22,6 +22,10 @@ type fieldInfo struct {
 	flags fieldFlags
 }
 
+type Table struct {
+	Name, Encoding, Locale string
+}
+
 type fieldFlags int
 
 const (
@@ -29,7 +33,9 @@ const (
 	fAuto
 	fOmitEmpty
 
-	fMode = fElement | fAuto | fOmitEmpty
+	QuerySelect = fElement
+	QueryInsert = fElement | fAuto
+	fMode       = fElement | fAuto | fOmitEmpty
 )
 
 var tinfoMap = make(map[reflect.Type]*typeInfo)
@@ -89,9 +95,10 @@ func structfieldInfo(typ reflect.Type, f *reflect.StructField) (*fieldInfo, erro
 
 	// Parse flags.
 	tokens := strings.Split(tag, ",")
-	if len(tokens) == 1 {
-		finfo.flags = fElement
-	} else {
+
+	finfo.flags = fElement
+
+	if len(tokens) > 1 {
 		tag = tokens[0]
 		for _, flag := range tokens[1:] {
 			switch flag {
