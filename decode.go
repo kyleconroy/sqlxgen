@@ -1,3 +1,6 @@
+// Package dba implements decoding of database rows. The mapping between JSON
+// objects and Go values is described in the documentation for *row.Scan and
+// *rows.Scan functions.
 package dba
 
 import (
@@ -6,6 +9,8 @@ import (
 	"reflect"
 )
 
+// Unmarshal parses the columns in given row and stores the result
+// in the value pointed to by v.
 func Unmarshal(rows *sql.Rows, v interface{}) error {
 	val := reflect.ValueOf(v)
 	if val.Kind() != reflect.Ptr {

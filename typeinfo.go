@@ -1,6 +1,3 @@
-// Copyright 2011 The Go Authors.  All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
 package dba
 
 import (
@@ -25,12 +22,9 @@ type fieldFlags int
 
 const (
 	fElement fieldFlags = 1 << iota
-	fAuto
 	fOmitEmpty
 
-	QuerySelect = fElement
-	QueryInsert = fElement | fAuto
-	fMode       = fElement | fAuto | fOmitEmpty
+	fMode = fElement | fOmitEmpty
 )
 
 var tinfoMap = make(map[reflect.Type]*typeInfo)
@@ -84,8 +78,6 @@ func structfieldInfo(typ reflect.Type, f *reflect.StructField) (*fieldInfo, erro
 		tag = tokens[0]
 		for _, flag := range tokens[1:] {
 			switch flag {
-			case "auto":
-				finfo.flags |= fAuto
 			case "omitempty":
 				finfo.flags |= fOmitEmpty
 			}
