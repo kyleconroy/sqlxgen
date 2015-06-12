@@ -1,45 +1,15 @@
-package dal
+package dba
 
 import (
 	"reflect"
 	"testing"
 )
 
-type book struct {
-}
-
-type empty struct {
-	DALTable Table
-}
-
 type library struct {
-	DALTable Table  `dal:"libraries"`
-	Name     string `dal:"branch_name"`
+	Name     string `dba:"branch_name"`
 	Location string
-	Key      int    `dal:"key,auto"`
-	Books    []book `dal:"-"`
-}
-
-func TestTableName(t *testing.T) {
-	tests := map[string]interface{}{
-		"":          empty{},
-		"book":      book{},
-		"libraries": library{},
-	}
-
-	for k, v := range tests {
-		typ := reflect.ValueOf(v).Type()
-		tinfo, err := getTypeInfo(typ)
-
-		if err != nil || tinfo == nil {
-			t.Error(err)
-			continue
-		}
-
-		if tinfo.daltable == nil || tinfo.daltable.name != k {
-			t.Errorf("%s != %s", tinfo.daltable, k)
-		}
-	}
+	Key      int   `dba:"key,auto"`
+	Books    []int `dba:"-"`
 }
 
 func TestColumnNames(t *testing.T) {
@@ -51,7 +21,7 @@ func TestColumnNames(t *testing.T) {
 	}
 
 	if len(tinfo.fields) != 3 {
-		t.Fatal("tinfo should have 2 fields, not", len(tinfo.fields))
+		t.Fatal("tinfo should have 3 fields, not", len(tinfo.fields))
 	}
 
 	if tinfo.fields[0].name != "branch_name" {
@@ -65,14 +35,4 @@ func TestColumnNames(t *testing.T) {
 	if tinfo.fields[2].name != "key" {
 		t.Errorf("tinfo[2] should be Location, not %+v", tinfo.fields[2])
 	}
-
 }
-
-//func TestValues(t *testing.T) {
-//	_, columns, _ := Expression(&library{}, QuerySelect)
-//
-//	if !reflect.DeepEqual(columns, []string{"libraries.branch_name libraries.Location libraries.key"}) {
-//		t.Errorf("%s is wrong", columns)
-//	}
-//
-//}

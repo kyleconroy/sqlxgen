@@ -1,8 +1,19 @@
+# Database Awesome
 
+## Description
 
-var conference Conference
-var conferences []Conference
+Easily unmarshal database rows into structs.
 
-db.Select(&conference, dal.Where("name=?", "bacon"))
-db.Select(&conferences, dal.Where("closes < now()").Limit(50))
-db.Insert(&conference)
+## Installation
+
+This package can be installed with the go get command:
+
+```
+go get github.com/kyleconroy/dba
+```
+
+## Documentation
+
+API documentation can be found here: http://godoc.org/github.com/kyleconroy/dba
+
+Examples can be found under the ./_example directory
