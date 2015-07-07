@@ -56,6 +56,7 @@ var postgresDataTypes = map[string]string{
 	"integer":           "int",
 	"character varying": "string",
 	"text":              "string",
+	"date":              "time.Time",
 	"timestamp with time zone":    "time.Time",
 	"timestamp":                   "time.Time",
 	"timestamp without time zone": "time.Time",
