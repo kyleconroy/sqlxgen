@@ -9,7 +9,22 @@ Easily unmarshal database rows into structs.
 This package can be installed with the go get command:
 
 ```
-go get github.com/kyleconroy/dba
+go get github.com/kyleconroy/dba/dba
+```
+
+## Usage
+
+DBA can generate structs directly from database tables to save you time
+
+```
+$ dba generate --url="dbname=noble" --table=books --struct=Book --pkg=barnes
+package barnes
+
+type Book struct {
+  Author string   // author
+  ISBN   string   // isbn
+  Price  int      // price
+}
 ```
 
 ## Documentation
