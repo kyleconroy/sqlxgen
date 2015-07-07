@@ -1,4 +1,4 @@
-package dba
+package generate
 
 import (
 	"database/sql"
@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func Generate(db *sql.DB, tableName, pkgName, structName string, tags bool) ([]byte, error) {
+func Struct(db *sql.DB, tableName, pkgName, structName string) ([]byte, error) {
 	columns, err := columnInformation(db, tableName)
 	if err != nil {
 		return []byte{}, err
@@ -16,7 +16,7 @@ func Generate(db *sql.DB, tableName, pkgName, structName string, tags bool) ([]b
 	src := fmt.Sprintf("package %s\ntype %s %s\n}",
 		pkgName,
 		structName,
-		generateFields(columns, tags))
+		generateFields(columns))
 	formatted, err := format.Source([]byte(src))
 	if err != nil {
 		err = fmt.Errorf("error formatting: %s, was formatting\n%s", err, src)
@@ -99,7 +99,7 @@ var commonInitialisms = map[string]bool{
 	"XML":   true,
 }
 
-func generateFields(columns []column, tags bool) string {
+func generateFields(columns []column) string {
 	structure := "struct {"
 
 	for _, c := range columns {
@@ -117,12 +117,7 @@ func generateFields(columns []column, tags bool) string {
 			}
 		}
 
-		template := "\n%s %s // %s"
-		if tags {
-			template = "\n%s %s `dba:\"%s\"`"
-		}
-
-		structure += fmt.Sprintf(template,
+		structure += fmt.Sprintf("\n%s %s `db:\"%s\"`",
 			strings.Join(parts, ""),
 			typeName,
 			c.Name)
