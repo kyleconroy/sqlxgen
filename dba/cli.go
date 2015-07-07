@@ -15,7 +15,7 @@ func main() {
 	usage := `Database Awesome
 
 Usage:
-  dba generate --url=<db> --table=<tbl> [--package=<pkg>] [--struct=<name>]
+  dba generate --url=<db> --table=<tbl> [--package=<pkg>] [--struct=<name>] [--tags]
   dba -h | --help
   dba --version
 
