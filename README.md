@@ -4,6 +4,33 @@
 
 Easily unmarshal database rows into structs.
 
+```go
+package main
+
+import (
+	"database/sql"
+	"log"
+
+	"github.com/kyleconroy/dba"
+)
+
+type Book struct {
+	ID    int    `dba:"id"`
+	Shelf int    `dba:"-"`
+	Title string `dba:"name"`
+}
+
+func main() {
+	db, _ := sql.Open("...", "...")
+	rows, _ := db.Query("SELECT * FROM books")
+	rows.Next()
+
+	var book Book
+	dba.Unmarshal(rows, &book)
+	log.Println(book.ID, book.Title)
+}
+```
+
 ## Installation
 
 This package can be installed with the go get command:
